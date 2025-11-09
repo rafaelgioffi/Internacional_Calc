@@ -1,0 +1,9 @@
+{
+  "titleapp": "Calculadora Dev Inter.",
+  "loading": "Actualizando las monedas, espere...",
+  "loadingerror": "Error al actualizar monedas...",
+  "dataNotFound": "Dados no encontrados...",
+  "real": "Real brasileño",
+  "dolar": "Dólar",
+  "euro": "Euro"
+}

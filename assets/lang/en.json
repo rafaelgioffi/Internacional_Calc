@@ -1,0 +1,9 @@
+{
+  "titleapp": "International Dev Calculator",
+  "loading": "Updating the currencies, please wait...",
+  "loadingerror": "Error updating currencies...",
+  "dataNotFound": "Currency data not found...",
+  "real": "Brazilian Real",
+  "dolar": "Dolar",
+  "euro": "Euro"
+}
