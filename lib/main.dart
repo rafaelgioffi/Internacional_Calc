@@ -4,12 +4,11 @@ import 'package:calculadora_dev_internacional/shared/localization/translate_app.
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
-
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 var chave = Uri.parse(
   'https://api.hgbrasil.com/finance?format=json-cors&key=fbfe6e34',
@@ -21,13 +20,13 @@ Future<Map<String, dynamic>> getData() async {
     http.Response resposta = await http.get(chave);
     print('✅ Resposta recebida - Status: ${resposta.statusCode}');
 
-  if (resposta.statusCode == 200) {
-    var data = json.decode(resposta.body);
-    print('📊 Dados recebidos: $data');
-    return json.decode(resposta.body);
-  } else {
-    throw Exception('Failed to load data ${resposta.statusCode}');
-  }
+    if (resposta.statusCode == 200) {
+      var data = json.decode(resposta.body);
+      print('📊 Dados recebidos: $data');
+      return json.decode(resposta.body);
+    } else {
+      throw Exception('Failed to load data ${resposta.statusCode}');
+    }
   } catch (e) {
     throw Exception('Failed to load data: $e');
   }
@@ -47,7 +46,20 @@ void main() async {
   runApp(
     MaterialApp(
       home: Home(),
-      theme: ThemeData(hintColor: Colors.green, primaryColor: Colors.white),
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.green,
+        hintColor: Colors.green,
+        scaffoldBackgroundColor: Colors.white,
+        // primaryColor: Colors.white,
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.green,
+        hintColor: Colors.green,
+        scaffoldBackgroundColor: Color(0xFF121212),
+      ),
+      themeMode: ThemeMode.system,
       supportedLocales: [
         Locale('en', 'US'),
         Locale('pt', 'BR'),
@@ -60,12 +72,11 @@ void main() async {
         GlobalCupertinoLocalizations.delegate,
       ],
       localeResolutionCallback: (locale, supportedLocales) {
-        for (var supportedLocale in supportedLocales)
-        {
+        for (var supportedLocale in supportedLocales) {
           if (supportedLocale.languageCode == locale?.languageCode) {
             return supportedLocale;
           }
-      }
+        }
         return supportedLocales.first;
       },
     ),
@@ -84,7 +95,7 @@ class _HomeState extends State<Home> {
   bool _isBannerAdReady = false;
   bool _adsInitialized = false;
 
-  final bannerAdIdAndroid = "ca-app-pub-9686860589009637/7987536502";   // Real
+  final bannerAdIdAndroid = "ca-app-pub-9686860589009637/7987536502"; // Real
   // final bannerAdIdAndroid = "ca-app-pub-3940256099942544/6300978111";   // Teste
 
   final bannerAdIdIos = "ca-app-pub-9686860589009637/7987536502";
@@ -97,7 +108,7 @@ class _HomeState extends State<Home> {
   String get bannerAdUnitId =>
       Platform.isIOS ? bannerAdIdIos : bannerAdIdAndroid;
   // String get interstitialAdUnitId =>
-      // Platform.isIOS ? intertstitialAdIdIos : intertstitialAdIdAndroid;
+  // Platform.isIOS ? intertstitialAdIdIos : intertstitialAdIdAndroid;
 
   final realControlador = TextEditingController();
   final dolarControlador = TextEditingController();
@@ -122,20 +133,20 @@ class _HomeState extends State<Home> {
     _dadosMoeda = getData();
     // _dadosMoeda.then((data) {
     //   final results = data["results"];
-      
-    //   if (results == null) 
+
+    //   if (results == null)
     //     return;
-      
+
     //   final currencies = results["currencies"];
-      
-    //   if (currencies == null) 
+
+    //   if (currencies == null)
     //     return;
 
     //   final usd = currencies["USD"];
     //   final eur = currencies["EUR"];
     //   final btcCurrency = currencies["BTC"];
 
-    //   if (usd == null || eur == null || btcCurrency == null) 
+    //   if (usd == null || eur == null || btcCurrency == null)
     //     return;
 
     //   dolar = (usd["sell"] ?? 0.0).toDouble();
@@ -149,7 +160,7 @@ class _HomeState extends State<Home> {
     //   euro = double.parse(euro2);
     //   btc = double.parse(btc2);
 
-      // --- Listeners para o Botão de Limpar (suffixIcon) ---
+    // --- Listeners para o Botão de Limpar (suffixIcon) ---
     // Faz o widget reconstruir para mostrar/esconder o 'X'
     realControlador.addListener(_onTextChanged);
     dolarControlador.addListener(_onTextChanged);
@@ -231,11 +242,11 @@ class _HomeState extends State<Home> {
     if (controller.text.isEmpty) return;
     final formatador = _getCurrencyFormat(context);
     double value = _parseInput(controller.text);
-    
+
     // Usamos setState para garantir que o listener _onTextChanged
     // também seja notificado caso o texto mude.
     setState(() {
-       controller.text = formatador.format(value);
+      controller.text = formatador.format(value);
     });
   }
 
@@ -268,17 +279,17 @@ class _HomeState extends State<Home> {
       return SizedBox.shrink();
     }
     // if (_isBannerAdReady) {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: SizedBox(
-          width: _bannerAd!.size.width.toDouble(),
-          height: _bannerAd!.size.height.toDouble(),
-          child: AdWidget(ad: _bannerAd!),
-        ),
-      );
-    }
-    // return Container();
-    // return SizedBox.shrink();
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SizedBox(
+        width: _bannerAd!.size.width.toDouble(),
+        height: _bannerAd!.size.height.toDouble(),
+        child: AdWidget(ad: _bannerAd!),
+      ),
+    );
+  }
+  // return Container();
+  // return SizedBox.shrink();
   // }
 
 // String _formatNumber(valor, local) {
@@ -290,10 +301,7 @@ class _HomeState extends State<Home> {
   NumberFormat _getCurrencyFormat(BuildContext context) {
     final deviceLocale = Localizations.localeOf(context).toLanguageTag();
     return NumberFormat.currency(
-      locale: deviceLocale,
-      symbol: '',
-      decimalDigits: 2
-    );
+        locale: deviceLocale, symbol: '', decimalDigits: 2);
   }
 
   void _clearFields() {
@@ -307,18 +315,16 @@ class _HomeState extends State<Home> {
   double _parseInput(String text) {
     final formatador = _getCurrencyFormat(context);
     // Remove separadores de milhar (ex: 10.000 -> 10000)
-    String cleanText =
-        text.replaceAll(formatador.symbols.GROUP_SEP, '');
+    String cleanText = text.replaceAll(formatador.symbols.GROUP_SEP, '');
     // Troca separador decimal do locale por '.' (ex: 10,50 -> 10.50)
-    cleanText =
-        cleanText.replaceAll(formatador.symbols.DECIMAL_SEP, '.');
+    cleanText = cleanText.replaceAll(formatador.symbols.DECIMAL_SEP, '.');
 
     try {
       return double.parse(cleanText);
     } catch (e) {
       return 0.0;
     }
-  }  
+  }
 
   // void _loadInterstitialAd() {
   //   InterstitialAd.load(
@@ -354,20 +360,19 @@ class _HomeState extends State<Home> {
   // }
   //fim google ads parte 3...
 
-    // --- Funções de Conversão ---
+  // --- Funções de Conversão ---
   void _realTroca(String text) {
     // if (text.isEmpty) {
-    if (!realFocus.hasFocus)
-      return;
+    if (!realFocus.hasFocus) return;
 
-      if (text.isEmpty) {      
+    if (text.isEmpty) {
       _clearFields();
       return;
     }
 
     final formatador = _getCurrencyFormat(context);
     double real = _parseInput(text);
-    
+
     dolarControlador.text = formatador.format(real / dolar);
     euroControlador.text = formatador.format(real / euro);
     btcControlador.text = (real / btc).toStringAsFixed(10);
@@ -383,15 +388,14 @@ class _HomeState extends State<Home> {
     // double real = double.parse(text);
     // dolarControlador.text = (real / dolar).toStringAsFixed(2);
     // euroControlador.text = (real / euro).toStringAsFixed(2);
-    
+
     // print(real);
   }
 
   void _dolarTroca(String text) {
-    if (!dolarFocus.hasFocus) 
-      return;
+    if (!dolarFocus.hasFocus) return;
 
-    if (text.isEmpty) {      
+    if (text.isEmpty) {
       _clearFields();
       return;
     }
@@ -415,8 +419,7 @@ class _HomeState extends State<Home> {
   }
 
   void _euroTroca(String text) {
-    if (!euroFocus.hasFocus)
-      return;
+    if (!euroFocus.hasFocus) return;
     if (text.isEmpty) {
       _clearFields();
       return;
@@ -440,15 +443,14 @@ class _HomeState extends State<Home> {
   }
 
   void _btcTroca(String text) {
-    if (!btcFocus.hasFocus) 
-      return;
+    if (!btcFocus.hasFocus) return;
     if (text.isEmpty) {
       // dolarControlador.text = "";
       // euroControlador.text = "";
       // realControlador.text = "";
       _clearFields();
       return;
-    }    
+    }
     // double btc = double.parse(text);
     // realControlador.text = (btc * this.btc).toStringAsFixed(2);
     // dolarControlador.text = ((btc * this.btc) / dolar).toStringAsFixed(2);
@@ -470,13 +472,17 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(          
+        // backgroundColor: Colors.white,
+        title: Text(
           TranslateApp(context).text('titleapp'),
           // 'Conversor de Moedas',
-          style: TextStyle(color: Colors.green),
+          // style: TextStyle(color: Colors.green),
+          style: GoogleFonts.poppins(
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.w600,
+        ),
         ),
         centerTitle: true,
       ),
@@ -505,25 +511,25 @@ class _HomeState extends State<Home> {
                 return Center(
                   child: Text(TranslateApp(context).text('loadingerror')),
                   // child: Text('Erro ao carregar dados :('),
-                );              
-              // } else if (snapshot.data == null) {
-              // } else if (!snapshot.hasData || snapshot.data?["results"] == null) {
-                  // return Center(
-                  //   child: Text(TranslateApp(context).text('loadingerror')),
-                  //   // child: Text('Dados não disponíveis :('),
-                  // );
-                } else {
-                  // ADICIONEI ESTE PRINT PARA TESTE
-                  print("✅ Future concluído. Construindo a UI principal...");
+                );
+                // } else if (snapshot.data == null) {
+                // } else if (!snapshot.hasData || snapshot.data?["results"] == null) {
+                // return Center(
+                //   child: Text(TranslateApp(context).text('loadingerror')),
+                //   // child: Text('Dados não disponíveis :('),
+                // );
+              } else {
+                // ADICIONEI ESTE PRINT PARA TESTE
+                print("✅ Future concluído. Construindo a UI principal...");
 
-                  final data = snapshot.data!;
-                  final results = data["results"];
+                final data = snapshot.data!;
+                final results = data["results"];
 
-                  if (results == null) {
-                    return Center(
-                      child: Text(TranslateApp(context).text('loadingerror')),
-                      // child: Text('Dados de câmbio indisponíveis :('),
-                    );
+                if (results == null) {
+                  return Center(
+                    child: Text(TranslateApp(context).text('loadingerror')),
+                    // child: Text('Dados de câmbio indisponíveis :('),
+                  );
                 }
 
                 final currencies = results["currencies"];
@@ -576,68 +582,67 @@ class _HomeState extends State<Home> {
                   //   // 'mounted' verifica se o widget ainda está na tela
                   //   if (mounted) {
                   _loadBannerAd(); // Carrega o anúncio com segurança
-                    // }
+                  // }
                   // });
                 }
 
-                return 
-                Stack(
+                return Stack(
                   children: [
-                  SingleChildScrollView(
-                    padding: EdgeInsets.all(10.0),
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 60.0),
-                    child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Icon(
-                        Icons.monetization_on,
-                        size: 150.0,
-                        color: Colors.lightGreen,
+                    SingleChildScrollView(
+                      padding: EdgeInsets.all(10.0),
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 60.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                            Icon(
+                              Icons.monetization_on,
+                              size: 150.0,
+                              color: Colors.lightGreen,
+                            ),
+                            Divider(),
+                            criaTextsFields(
+                              TranslateApp(context).text('real'),
+                              // 'Real',
+                              "R\$",
+                              realControlador,
+                              realFocus,
+                              _realTroca,
+                            ),
+                            Divider(),
+                            criaTextsFields(
+                              TranslateApp(context).text('dolar'),
+                              // 'Dólar',
+                              "US\$",
+                              dolarControlador,
+                              dolarFocus,
+                              _dolarTroca,
+                            ),
+                            Divider(),
+                            criaTextsFields(
+                              TranslateApp(context).text('euro'),
+                              // 'Euro',
+                              "€",
+                              euroControlador,
+                              euroFocus,
+                              _euroTroca,
+                            ),
+                            Divider(),
+                            criaTextsFields(
+                              "Bitcoin",
+                              "BTC",
+                              btcControlador,
+                              btcFocus,
+                              _btcTroca,
+                            ),
+                          ],
+                        ),
                       ),
-                      Divider(),
-                      criaTextsFields(
-                        TranslateApp(context).text('real'),
-                        // 'Real',
-                        "R\$",
-                        realControlador,
-                        realFocus,
-                        _realTroca,
-                      ),
-                      Divider(),
-                      criaTextsFields(
-                        TranslateApp(context).text('dolar'),
-                        // 'Dólar',
-                        "US\$",
-                        dolarControlador,
-                        dolarFocus,
-                        _dolarTroca,
-                      ),
-                      Divider(),
-                      criaTextsFields(
-                        TranslateApp(context).text('euro'),
-                        // 'Euro',
-                        "€",
-                        euroControlador,
-                        euroFocus,
-                        _euroTroca,
-                      ),
-                      Divider(),
-                      criaTextsFields(
-                        "Bitcoin",
-                        "BTC",
-                        btcControlador,
-                        btcFocus,
-                        _btcTroca,
-                      ),
-                    ],
-                  ),
-                  ),
-                ),
-                _buildBannerAdWidget(),
-                ],
+                    ),
+                    _buildBannerAdWidget(),
+                  ],
                 );
-  }
+              }
           }
         },
       ),
@@ -656,11 +661,17 @@ class _HomeState extends State<Home> {
       focusNode: focus,
       decoration: InputDecoration(
         labelText: texto,
-        labelStyle: TextStyle(color: Colors.green),
+        // labelStyle: TextStyle(color: Colors.green),
+        labelStyle: GoogleFonts.lato(color: Theme.of(context).hintColor),
+        filled: true,
+        fillColor: Theme.of(context).colorScheme.primary.withAlpha(20),
         border: OutlineInputBorder(),
         prefixText: prefix,
-        prefixStyle: TextStyle(color: Colors.green, fontSize: 25.0),
-      
+        prefixStyle: TextStyle(
+          // color: Colors.green, 
+          color: Theme.of(context).colorScheme.primary,
+          fontSize: 25.0),
+
         // ADICIONA O BOTÃO DE LIMPAR (X)
         suffixIcon: c.text.isNotEmpty
             ? IconButton(
@@ -669,7 +680,11 @@ class _HomeState extends State<Home> {
               )
             : null, // Não mostra nada se o campo estiver vazio
       ),
-      style: TextStyle(color: Colors.green, fontSize: 25.0),
+      style: 
+      TextStyle(
+        // color: Colors.green, 
+        color: Theme.of(context).colorScheme.primary,
+        fontSize: 25.0),
       keyboardType: TextInputType.numberWithOptions(decimal: true),
       onChanged: f,
     );
