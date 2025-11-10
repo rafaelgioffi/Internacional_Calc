@@ -7,34 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:calculadora_dev_internacional/app_navigator.dart';
 
-import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
-
-var chave = Uri.parse(
-  'https://api.hgbrasil.com/finance?format=json-cors&key=fbfe6e34',
-);
-
-Future<Map<String, dynamic>> getData() async {
-  try {
-    print('🔍 Fazendo requisição para a API...');
-    http.Response resposta = await http.get(chave);
-    print('✅ Resposta recebida - Status: ${resposta.statusCode}');
-
-    if (resposta.statusCode == 200) {
-      var data = json.decode(resposta.body);
-      print('📊 Dados recebidos: $data');
-      return json.decode(resposta.body);
-    } else {
-      throw Exception('Failed to load data ${resposta.statusCode}');
-    }
-  } catch (e) {
-    throw Exception('Failed to load data: $e');
-  }
-  // return json.decode(resposta.body);
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
