@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:calculadora_dev_internacional/shared/localization/translate_app.dart';
+import 'package:international_calc/shared/localization/translate_app.dart';
 
 class SalaryCalculatorScreen extends StatefulWidget {
   final Map<String, dynamic> apiData;
@@ -102,7 +102,7 @@ void _parseApiData() {
 
   void _formatField(TextEditingController controller) {
     if (controller.text.isEmpty) return;
-    final formatador = _getCurrencyFormat(context);
+    final formatador = _getCurrencyFormat(context, 2);
     double value = _parseInput(controller.text);
     setState(() {
       controller.text = formatador.format(value);
@@ -211,7 +211,7 @@ void _parseApiData() {
 
   @override
   Widget build(BuildContext context) {
-    String hoursText = TranslateApp(context).text('salary_based_on');
+    String hoursText = TranslateApp(context).text('salaryBased');
     hoursText = hoursText.replaceAll('{hours}', _hoursPerMonth.toStringAsFixed(0));
 
     // Formatadores para os resultados

@@ -5,8 +5,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:calculadora_dev_internacional/shared/localization/localization_app.dart';
-import 'package:calculadora_dev_internacional/shared/localization/translate_app.dart';
+import 'package:international_calc/shared/localization/localization_app.dart';
+import 'package:international_calc/shared/localization/translate_app.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 

@@ -1,4 +1,4 @@
-name: calculadora_dev_internacional
+name: international_calc
 description: "Calculadora para conversão de valores e salários internacionais."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.

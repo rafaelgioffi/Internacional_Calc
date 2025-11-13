@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "br.com.rafaelgioffi" "\0"
-            VALUE "FileDescription", "calculadora_dev_internacional" "\0"
+            VALUE "FileDescription", "international_calc" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "calculadora_dev_internacional" "\0"
+            VALUE "InternalName", "international_calc" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 br.com.rafaelgioffi. All rights reserved." "\0"
-            VALUE "OriginalFilename", "calculadora_dev_internacional.exe" "\0"
-            VALUE "ProductName", "calculadora_dev_internacional" "\0"
+            VALUE "OriginalFilename", "international_calc.exe" "\0"
+            VALUE "ProductName", "international_calc" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

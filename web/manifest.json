@@ -1,6 +1,6 @@
 {
-    "name": "calculadora_dev_internacional",
-    "short_name": "calculadora_dev_internacional",
+    "name": "international_calc",
+    "short_name": "international_calc",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

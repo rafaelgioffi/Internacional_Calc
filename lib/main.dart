@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:calculadora_dev_internacional/shared/localization/localization_app.dart';
+import 'package:international_calc/shared/localization/localization_app.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:calculadora_dev_internacional/app_navigator.dart';
+import 'package:international_calc/app_navigator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

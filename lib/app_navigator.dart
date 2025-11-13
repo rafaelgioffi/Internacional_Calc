@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:calculadora_dev_internacional/home_screen.dart';
-import 'package:calculadora_dev_internacional/salary_calculator_screen.dart';
-import 'package:calculadora_dev_internacional/shared/localization/translate_app.dart';
+import 'package:international_calc/home_screen.dart';
+import 'package:international_calc/salary_calculator_screen.dart';
+import 'package:international_calc/shared/localization/translate_app.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -93,8 +93,8 @@ class _AppNavigatorState extends State<AppNavigator> {
 
         // Títulos (agora usam i18n)
         final List<String> _titles = [
-          TranslateApp(context).text('converter_title'),
-          TranslateApp(context).text('salary_title')
+          TranslateApp(context).text('converterTitle'),
+          TranslateApp(context).text('salaryTitle')
         ];
 
         return Scaffold(
@@ -111,7 +111,7 @@ class _AppNavigatorState extends State<AppNavigator> {
             children: _screens,
           ),
           bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.money),
                 label: TranslateApp(context).text('converterTitle'),
