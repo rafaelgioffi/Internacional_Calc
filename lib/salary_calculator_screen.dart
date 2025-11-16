@@ -311,7 +311,7 @@ class _SalaryCalculatorScreenState extends State<SalaryCalculatorScreen> {
 
   //slider das horas por mês...
   Widget _buildHoursSlider() {
-    String hoursText = TranslateApp(context).text('salary_based_on');
+    String hoursText = TranslateApp(context).text('salaryBased');
     hoursText = hoursText.replaceAll('{hours}', _hoursPerMonth.toStringAsFixed(0));
     
     return Column(
@@ -413,12 +413,14 @@ class _SalaryCalculatorScreenState extends State<SalaryCalculatorScreen> {
             _hourlyTroca,
           ),
           Divider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
-            child: Text(hoursText,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall),
-          ),
+          _buildHoursSlider(),
+          Divider(),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
+          //   child: Text(hoursText,
+          //       textAlign: TextAlign.center,
+          //       style: Theme.of(context).textTheme.bodySmall),
+          // ),
 
           // --- SEÇÃO DE RESULTADOS ---
           if (_annualBRL > 0)
@@ -434,28 +436,29 @@ class _SalaryCalculatorScreenState extends State<SalaryCalculatorScreen> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 10),
-                // BRL
+
+                if (_selectedCurrency != "BRL")
                 _buildResultCard(
                   title: "BRL (R\$)",
                   annual: formatBRL.format(_annualBRL),
                   monthly: formatBRL.format(_monthlyBRL),
                   hourly: formatBRL.format(_hourlyBRL),
                 ),
-                // USD
+                if (_selectedCurrency != "USD")
                 _buildResultCard(
                   title: "USD (US\$)",
                   annual: formatBRL.format(_annualBRL / dolar),
                   monthly: formatBRL.format(_monthlyBRL / dolar),
                   hourly: formatBRL.format(_hourlyBRL / dolar),
                 ),
-                // EUR
+                if (_selectedCurrency != "EUR")
                 _buildResultCard(
                   title: "EUR (€)",
                   annual: formatBRL.format(_annualBRL / euro),
                   monthly: formatBRL.format(_monthlyBRL / euro),
                   hourly: formatBRL.format(_hourlyBRL / euro),
                 ),
-                // BTC
+                if(_selectedCurrency != "BTC")
                 _buildResultCard(
                   title: "BTC (₿)",
                   annual: formatBTC.format(_annualBRL / btc),
