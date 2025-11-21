@@ -1,35 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:international_calc/home_screen.dart';
-import 'package:international_calc/salary_calculator_screen.dart';
+import '../models/currency_model.dart';
+import '../services/currency_service.dart';
+import 'currencies_converter.dart';
+import 'salary_calculator.dart';
 import 'package:international_calc/shared/localization/translate_app.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'dart:async';
-import 'dart:io';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
-var chave = Uri.parse(
-  'https://api.hgbrasil.com/finance?format=json-cors&key=fbfe6e34',
-);
-
-Future<Map<String, dynamic>> getData() async {
-  try {
-    print('🔍 Fazendo requisição para a API...');
-    http.Response resposta = await http.get(chave);
-    print('✅ Resposta recebida - Status: ${resposta.statusCode}');
-
-    if (resposta.statusCode == 200) {
-      var data = json.decode(resposta.body);
-      print('📊 Dados recebidos: $data');
-      return json.decode(resposta.body);
-    } else {
-      throw Exception('Failed to load data ${resposta.statusCode}');
-    }
-  } catch (e) {
-    throw Exception('Failed to load data: $e');
-  }
-  // return json.decode(resposta.body);
-}
 
 class AppNavigator extends StatefulWidget {
   @override
@@ -38,11 +14,11 @@ class AppNavigator extends StatefulWidget {
 
 class _AppNavigatorState extends State<AppNavigator> {
   int _selectedIndex = 0;
-  late Future<Map<String, dynamic>> _dadosMoeda;
 
-  late List<Widget> _screens;
+  late Future<CurrencyModel> _currencyData;
+  final CurrencyService _service = CurrencyService();
 
-   BannerAd? _bannerAd;
+  BannerAd? _bannerAd;
   bool _isBannerAdReady = false;
   // InterstitialAd? _interstitialAd;
   // bool _adsInitialized = false;
@@ -65,11 +41,11 @@ class _AppNavigatorState extends State<AppNavigator> {
   @override
   void initState() {
     super.initState();
-    _dadosMoeda = getData();
+    _currencyData = _service.getCurrencies();
     _loadBannerAd();
   }
 
-@override
+  @override
   void dispose() {
   _bannerAd?.dispose();
     // _interstitialAd?.dispose();
@@ -120,10 +96,10 @@ class _AppNavigatorState extends State<AppNavigator> {
     });
   }
 
-  @override
+@override
   Widget build(BuildContext context) {
-    return FutureBuilder<Map<String, dynamic>>(
-      future: _dadosMoeda,
+    return FutureBuilder<CurrencyModel>(
+      future: _currencyData,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
@@ -141,8 +117,7 @@ class _AppNavigatorState extends State<AppNavigator> {
         }
 
         if (snapshot.hasError ||
-            !snapshot.hasData ||
-            snapshot.data!["results"] == null) {
+            !snapshot.hasData) {
           return Scaffold(
             body: Center(
               child: Text(TranslateApp(context).text('loadingerror')),
@@ -151,12 +126,11 @@ class _AppNavigatorState extends State<AppNavigator> {
         }
 
         // Se os dados carregaram, crie as telas e passe os dados
-        final data = snapshot.data!;
+        final CurrencyModel data = snapshot.data!;
 
-        // Passa os dados brutos da API para as telas filhas
-        _screens = [
-          Home(apiData: data),
-          SalaryCalculatorScreen(apiData: data),
+        List<Widget> _screens = [
+          CurrenciesConverter(currencies: data),
+          SalaryCalculator(currencies: data),
         ];
 
         // Títulos (agora usam i18n)
